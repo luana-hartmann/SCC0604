@@ -4,9 +4,10 @@ import main.GameWindow;
 
 public class Game {
     private GameWindow window;
-    
+    private GamePanel panel;
     public Game () {
-            System.out.println("Game");
-            window = new GameWindow ();
+        panel = new GamePanel ();
+        window = new GameWindow (panel);
+            
     }
 }
