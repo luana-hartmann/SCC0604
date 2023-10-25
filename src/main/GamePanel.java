@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.Random;
+import java.awt.Dimension;
 
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
@@ -19,12 +20,22 @@ public class GamePanel extends JPanel{
     private Random random;
     
     public GamePanel () {
-        addKeyListener(new KeyboardInputs(this));
+        setPanelSize();
         
         random = new Random ();
         mouseInputs = new MouseInputs(this);
+        
+        addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
+    }
+    
+    private void setPanelSize () {
+        /*32 x 25 pixels*/
+        Dimension size  = new Dimension(1280,800);
+        setMinimumSize(size);
+        setPreferredSize(size);
+        setMaximumSize(size);
     }
     
     public void changeX (int value) {
@@ -50,16 +61,7 @@ public class GamePanel extends JPanel{
         updateRec();
         g.setColor(color);
         g.fillRect((int)xDelta,(int)yDelta ,200,50);
-        
-        /*checks the FPS of the game*/
-        frames++;
-        if (System.currentTimeMillis() - lastCheck >= 1000) {
-            lastCheck = System.currentTimeMillis();
-            System.out.println("FPS "+frames);
-            frames=0;
-        }
-        
-        repaint();
+
     }
     
     private void updateRec () {
