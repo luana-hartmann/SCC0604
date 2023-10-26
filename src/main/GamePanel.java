@@ -4,30 +4,65 @@ import javax.swing.JPanel;
 import java.awt.Graphics;
 import java.awt.Color;
 import java.util.Random;
+
+import javax.imageio.ImageIO;
+import java.io.IOException;
 import java.awt.Dimension;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
+
+import static utilz.Constants.PlayerConstants.*;
+import static utilz.Constants.Directions.*;
 
 public class GamePanel extends JPanel{
     
     private MouseInputs mouseInputs;
     private float xDelta = 0, yDelta = 0;
-    private float xDir = 0.03f, yDir = 0.03f;
+    private BufferedImage img;
+    private BufferedImage[][] animations;
+    private int aniTick, aniIndex, aniSpeed = 15;
+    private int player_action = IDLE;
+    private int player_direction =  -1;
+    private boolean moving = false;
+    
     private int frames = 0;
     private long lastCheck = 0;
-    private Color color = new Color (150,20,90);
-    private Random random;
     
     public GamePanel () {
         setPanelSize();
+ 
+        importImg(); 
+        loadAnimations();
         
-        random = new Random ();
         mouseInputs = new MouseInputs(this);
-        
         addKeyListener(new KeyboardInputs(this));
         addMouseListener(mouseInputs);
         addMouseMotionListener(mouseInputs);
+    }
+    
+    private void loadAnimations () {
+        animations = new BufferedImage[9][6];
+        
+        for (int j = 0; j < animations.length; j++)
+            for (int i = 0; i < animations[j].length; i++)
+                animations[j][i] = img.getSubimage(i*64, j*40,64,40);
+            
+        
+    }
+    
+    private void importImg () {
+        InputStream is = getClass().getResourceAsStream("/player_sprites.png");
+
+	try {	
+            img = ImageIO.read(is);
+	} 
+        catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+	}
     }
     
     private void setPanelSize () {
@@ -38,51 +73,60 @@ public class GamePanel extends JPanel{
         setMaximumSize(size);
     }
     
-    public void changeX (int value) {
-        this.xDelta += value;
-        //repaint();
+    public void setDirection (int direction) {
+        this.player_direction = direction;
+        moving = true;
     }
     
-    public void changeY (int value) {
-        this.yDelta += value;
-        //repaint();
+    public void setMoving (boolean moving) {
+        this.moving = moving;
+    }
+    private void updateAnimationTick () {
+        
+        aniTick++;
+        if(aniTick >= aniSpeed) {
+            aniTick = 0;
+            aniIndex++;
+            if (aniIndex >= GetSpriteAmount(player_action))
+                aniIndex = 0;
+                
+        }
+        
     }
     
-    public void setRecPos (int x, int y) {
-        this.yDelta = y;
-        this.xDelta = x;
-        //repaint();
+    public void setAnimation () {
+        if (moving) player_action = RUNNING;
+        else player_action = IDLE;
+    }
+    
+    private void updatePosition () {
+        if (moving) {
+            switch (player_direction) {
+                case LEFT:
+                    xDelta -= 5;
+                    break;
+                case UP:
+                    yDelta -= 5;
+                    break;
+                case RIGHT:
+                    xDelta += 5;
+                    break;
+                case DOWN:
+                    yDelta += 5;
+                    break;
+            }
+        }
     }
     
     /*draw function from JPanel*/
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         
-        updateRec();
-        g.setColor(color);
-        g.fillRect((int)xDelta,(int)yDelta ,200,50);
-
-    }
+        updateAnimationTick();
+        setAnimation ();
+        updatePosition();
+	g.drawImage(animations[player_action][aniIndex], (int) xDelta, (int) yDelta, 256, 160, null);   
+    } 
     
-    private void updateRec () {
-        xDelta+=xDir;
-        if (xDelta > 400 || xDelta < 0) {
-            xDir *= -1;
-            color = getRandomColor();
-        }
-        
-        yDelta+=yDir;
-        if (yDelta > 400 || yDelta < 0) {
-            yDir *= -1;
-            color = getRandomColor();
-        }
-    }
     
-    private Color getRandomColor () {
-        int r = random.nextInt(255);
-        int b = random.nextInt(255);
-        int g = random.nextInt(255);
-        
-        return new Color (r,b,g);
-    }
 }
