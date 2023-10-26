@@ -1,21 +1,32 @@
 package main;
 
+import entities.Player;
+import java.awt.Graphics;
 import main.GameWindow;
+import main.GamePanel;
 
-public class Game implements Runnable{
+public class Game implements Runnable {
+    
     private GameWindow window;
     private GamePanel panel;
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
     
+    private Player player;
+    
     public Game () {
-        panel = new GamePanel ();
+        initClasses();
+        panel = new GamePanel (this);
         window = new GameWindow (panel);
         
         panel.requestFocus();
         
-        startGameLoop();
+        startGameLoop();   
+    }
+    
+    private void initClasses () {
+        player = new Player (200,200);
     }
     
     private void startGameLoop () {
@@ -24,7 +35,11 @@ public class Game implements Runnable{
     }
     
     public void update () {
-        panel.updateGame();
+        player.update();
+    }
+    
+    public void render (Graphics g) {
+        player.render(g);
     }
     
     @Override
@@ -32,7 +47,7 @@ public class Game implements Runnable{
         
         /*duration each frame should last*/
         double timePerFrame = 1000000000.0 / FPS_SET;      
-        /*duration of each update*/
+        /*duration of each update to avoid lagg*/
         double timePerUpdate = 1000000000.0 / UPS_SET; 
         
         long previousTime = System.nanoTime();
@@ -63,8 +78,7 @@ public class Game implements Runnable{
                 deltaF--;
             }
             
-            /*checks the FPS of the game*/
-            
+            /*checks the FPS of the game*/           
             if (System.currentTimeMillis() - lastCheck >= 1000) {
                 lastCheck = System.currentTimeMillis();
                 System.out.println("FPS: "+frames+" | UPDATES: "+updates);
@@ -73,5 +87,13 @@ public class Game implements Runnable{
             }
             
         }
+    }
+    
+    public Player getPlayer() {
+        return player;
+    }
+
+    void windowFocusLost() {
+        player.resetDirBooleans();
     }
 }
