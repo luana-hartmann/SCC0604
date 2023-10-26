@@ -14,25 +14,26 @@ public class Player extends Entity {
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 15;
     private int player_action = IDLE;
-    //private int player_direction =  -1;
     private boolean moving = false, attacking = false;
     private boolean left, up, right, down;
     private float player_speed = 2.0f;
 
     public Player(float x, float y, int width, int height) {
-		super(x, y, width, height);
-		loadAnimations();
-	}
+	super(x, y, width, height);
+	loadAnimations();
+    }
+    
+    public void update() {
+        updatePosition();
+        updateHitBox();
+        updateAnimationTick();
+        setAnimation();
+    }
 
-	public void update() {
-		updatePosition();
-		updateAnimationTick();
-		setAnimation();
-	}
-
-	public void render(Graphics g) {
-		g.drawImage(animations[player_action][aniIndex], (int) x, (int) y, width, height, null);
-	}
+    public void render(Graphics g) {
+        g.drawImage(animations[player_action][aniIndex], (int) x, (int) y, width, height, null);
+        drawHitBox(g);
+    }
      
     private void updateAnimationTick () {
         
@@ -97,6 +98,7 @@ public class Player extends Entity {
         animations = new BufferedImage[9][6];        
         for (int j = 0; j < animations.length; j++)
             for (int i = 0; i < animations[j].length; i++)
+                // animations[j][i] = img.getSubimage(i*64, j*40,56,72);
                 animations[j][i] = img.getSubimage(i*64, j*40,64,40);
     }
 
