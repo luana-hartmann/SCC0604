@@ -19,7 +19,7 @@ public class Game implements Runnable {
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
-    
+     
     private Playing playing;
     private Menu menu;
     
