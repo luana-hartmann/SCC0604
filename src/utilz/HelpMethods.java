@@ -19,8 +19,11 @@ public class HelpMethods {
     
     private static boolean IsSolid (float x, float y, int[][]  lvlData) {
         
+        /*get the width of the full level*/
+        int maxWidth = lvlData[0].length * Game.TILES_SIZE;
+        
         /*checks if it's out of the game window*/
-        if (x < 0 || x >= Game.GAME_WIDTH) return true;
+        if (x < 0 || x >= maxWidth) return true;
         if (y < 0 || y >= Game.GAME_HEIGHT) return true;
         
         float xIndex = x / Game.TILES_SIZE;

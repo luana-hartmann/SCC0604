@@ -25,6 +25,7 @@ public class Game implements Runnable {
     
     public final static int TILES_DEFAULT_SIZE = 32;
     public final static float SCALE = 1f;
+    /*visible size, not actual size of the level*/
     public final static int TILES_IN_WIDTH = 26;
     public final static int TILES_IN_HEIGHT = 14;
     public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);

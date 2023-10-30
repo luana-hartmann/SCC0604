@@ -1,6 +1,7 @@
 package gamestates;
 
 import entities.Player;
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
@@ -8,6 +9,7 @@ import levels.LevelManager;
 import main.Game;
 import static main.Game.SCALE;
 import ui.PauseOverlay;
+import utilz.LoadSave;
 
 public class Playing extends State implements Statemethods {
     
@@ -15,6 +17,13 @@ public class Playing extends State implements Statemethods {
     private LevelManager levelManager;
     private PauseOverlay pauseOverlay;
     private boolean paused = false;
+    
+    private int xLvlOffset, 
+                leftBorder = (int) (0.2 * Game.GAME_WIDTH), 
+                rightBorder = (int) (0.8 * Game.GAME_WIDTH),
+                lvlTilesWide = LoadSave.GetLevelData()[0].length, /*max value of the leveloffset*/
+                maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH, /*how many tiles we can actually see*/
+                maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE; /*turning to pixels*/
 
     public Playing(Game game) {
         super(game);
@@ -43,18 +52,38 @@ public class Playing extends State implements Statemethods {
         if (!paused) {
             levelManager.update();
             player.update();
+            checkBorder();
         } else {
             pauseOverlay.update();
         }
     }
+    
+    private void checkBorder (){
+        int playerX = (int) player.getHitBox().x,
+            diff = playerX - xLvlOffset;
+        
+        if (diff > rightBorder)
+            xLvlOffset += diff - rightBorder;
+        else if (diff < leftBorder)
+            xLvlOffset += diff - leftBorder;
+        
+        if (xLvlOffset > maxLvlOffsetX)
+            xLvlOffset = maxLvlOffsetX;
+        else if (xLvlOffset < 0)
+            xLvlOffset = 0;
+    }
 
     @Override
     public void draw(Graphics g) {
-        levelManager.draw(g);
-        player.render(g);
+        levelManager.draw(g, xLvlOffset);
+        player.render(g, xLvlOffset);
         
-        if (paused)
+        if (paused) {
+            g.setColor(new Color(0,0,0,150));
+            g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_WIDTH);
             pauseOverlay.draw(g);
+        }
+            
     }
 
     @Override

@@ -18,12 +18,12 @@ public class LevelManager {
         lvlOne = new Level(LoadSave.GetLevelData());
     }
     
-    public void draw (Graphics g) {
+    public void draw (Graphics g, int lvlOffset) {
         for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
-            for (int i = 0; i < Game.TILES_IN_WIDTH; i++) {
+            for (int i = 0; i < lvlOne.getLevelData()[0].length; i++) {
                 int index = lvlOne.getSpriteIndex(i, j);
                 /*image x y width height observer*/
-                g.drawImage(levelSprite[index], i*Game.TILES_SIZE, j*Game.TILES_SIZE, Game.TILES_SIZE, Game.TILES_SIZE,  null);
+                g.drawImage(levelSprite[index], i*Game.TILES_SIZE - lvlOffset, j*Game.TILES_SIZE, Game.TILES_SIZE, Game.TILES_SIZE,  null);
             }
         
     }
