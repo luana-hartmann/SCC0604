@@ -5,10 +5,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.awt.image.BufferedImage;
+import java.util.Random;
 import levels.LevelManager;
 import main.Game;
 import static main.Game.SCALE;
 import ui.PauseOverlay;
+import static utilz.Constants.Environment.*;
 import utilz.LoadSave;
 
 public class Playing extends State implements Statemethods {
@@ -24,10 +27,22 @@ public class Playing extends State implements Statemethods {
                 lvlTilesWide = LoadSave.GetLevelData()[0].length, /*max value of the leveloffset*/
                 maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH, /*how many tiles we can actually see*/
                 maxLvlOffsetX = maxTilesOffset * Game.TILES_SIZE; /*turning to pixels*/
+    private BufferedImage backgroundImg, bigCloud, smallCloud;
+    private int[] smallCloudsPosition; /*random y values for small clouds*/
+    private Random rnd = new Random();
 
     public Playing(Game game) {
         super(game);
         initClasses ();
+        
+        backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PLAYING_BACKGROUND_IMG);
+        bigCloud = LoadSave.GetSpriteAtlas(LoadSave.BIG_CLOUDS);
+        smallCloud = LoadSave.GetSpriteAtlas(LoadSave.SMALL_CLOUDS);
+        
+        smallCloudsPosition = new int[8];
+        for (int i = 0; i < smallCloudsPosition.length; i++) 
+            /*random value between 90 and 100 for small clouds y position*/
+            smallCloudsPosition[i] = (int)(90 * Game.SCALE) + rnd.nextInt((int)(100 * Game.SCALE) );
     }
     
     private void initClasses () {
@@ -75,6 +90,9 @@ public class Playing extends State implements Statemethods {
 
     @Override
     public void draw(Graphics g) {
+        g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
+        drawClouds(g);
+        
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
         
@@ -84,6 +102,14 @@ public class Playing extends State implements Statemethods {
             pauseOverlay.draw(g);
         }
             
+    }
+    
+    public void drawClouds (Graphics g) {
+        for (int i = 0; i < 3; i++) 
+            g.drawImage(bigCloud, i * BIG_CLOUD_WIDTH - (int)(xLvlOffset * 0.3), (int) (204 * Game.SCALE),BIG_CLOUD_WIDTH, BIG_CLOUD_HEIGHT, null);
+        
+        for (int i = 0; i < smallCloudsPosition.length; i++)
+            g.drawImage(smallCloud, SMALL_CLOUD_WIDTH * i * 4 - (int)(xLvlOffset * 0.7), smallCloudsPosition[i], SMALL_CLOUD_WIDTH, SMALL_CLOUD_HEIGHT, null);
     }
 
     @Override
