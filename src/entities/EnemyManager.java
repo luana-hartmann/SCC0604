@@ -21,12 +21,12 @@ public class EnemyManager {
     
     private void addEnemies () {
         crabbies = LoadSave.GetCrabs();
-        System.out.println("size crabs"+crabbies.size());
+        System.out.println("size of crabbies: "+crabbies.size());
     }
     
-    public void update() {
+    public void update(int[][] lvlData) {
         for (Crabby c : crabbies)
-            c.update();
+            c.update(lvlData);
     }
     
     public void draw (Graphics g, int xLvlOffset) {
