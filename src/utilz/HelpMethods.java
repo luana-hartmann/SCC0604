@@ -29,7 +29,11 @@ public class HelpMethods {
         float xIndex = x / Game.TILES_SIZE;
         float yIndex = y / Game.TILES_SIZE;
         
-        int value = lvlData[(int) yIndex][(int) xIndex];
+        return tileSolid((int) xIndex, (int)yIndex, lvlData);
+    }
+    
+    public static boolean tileSolid (int xTile, int yTile, int[][] lvlData) {
+        int value = lvlData[(int) yTile][(int) xTile];
         
         /*checks if it's the scenario*/
         if (value >= 48 || value < 0 || value != 11) return true;
@@ -67,7 +71,7 @@ public class HelpMethods {
         }
     }
     
-    public static boolean EntityFloor(Rectangle2D.Float hitBox,int[][] lvlData) {
+    public static boolean EntityFloor(Rectangle2D.Float hitBox, int[][] lvlData) {
         /*checks the pixel bellow bottomleft and bottomright*/
         if (!IsSolid(hitBox.x, hitBox.y+hitBox.height+1, lvlData))
             if (!IsSolid(hitBox.x+hitBox.width, hitBox.y+hitBox.height+1, lvlData))
@@ -76,8 +80,28 @@ public class HelpMethods {
     }
     
     public static boolean IsFloor (Rectangle2D.Float hitBox, float xSpeed, int[][] lvlData) {
+        return IsSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvlData);       
+    }
+    
+    public static boolean sightClear_aux (int xSmaller, int xBigger, int y, int[][] lvlData) {
+        for (int i = 0; i < (xBigger - xSmaller); i++) {
+            if (tileSolid  (xSmaller + i, y, lvlData))
+                return false;
+            /*checking underneath*/
+            if (!tileSolid(xSmaller + i, y+1, lvlData))
+                return false;
+        }
+                
+        return true;
+    }
+    
+    public static boolean sightClear (int[][] lvlData, Rectangle2D.Float hitBox_1, Rectangle2D.Float hitBox_2, int tileY) {
+        int xTile_1 = (int) (hitBox_1.x/Game.TILES_SIZE);
+        int xTile_2 = (int) (hitBox_2.x/Game.TILES_SIZE);
         
-        return IsSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvlData);
-        
+        if (xTile_1 > xTile_2)
+            return sightClear_aux(xTile_2, xTile_1, tileY, lvlData);
+        else
+            return sightClear_aux(xTile_1, xTile_2, tileY, lvlData);
     }
 }
