@@ -54,7 +54,7 @@ public abstract class Enemy extends Entity {
         else
             xSpeed = walkSpeed;
                     
-        if (CanMoveHere(hitBox.x, hitBox.y, hitBox.width, hitBox.height, lvlData))
+        if (CanMoveHere(hitBox.x + xSpeed, hitBox.y, hitBox.width, hitBox.height, lvlData))
             if (IsFloor(hitBox, xSpeed, lvlData)) {
                 hitBox.x += xSpeed;
                 return;
@@ -135,6 +135,16 @@ public abstract class Enemy extends Entity {
             walkDir = LEFT;
     }
     
+    public void resetEnemy () {
+        hitBox.x = x;
+        hitBox.y = y;
+        firstUpdate = true;
+        currentHealth = maxHealth;
+        newState(IDLE);
+        active = true;
+        fallSpeed = 0;
+    }
+    
     public int getAniIndex() {
         return aniIndex;
     }
@@ -146,6 +156,5 @@ public abstract class Enemy extends Entity {
     public boolean isActive() {
         return active;
     }
-    
     
 }
