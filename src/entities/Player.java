@@ -48,7 +48,7 @@ public class Player extends Entity {
     private int healthBar_y = (int) (14 * Game.SCALE);
     /*manage the health bar*/
     private int maxHealth = 100;
-    private int currentHealth = 40;//maxHealth;
+    private int currentHealth = maxHealth;
     private int health_width = healthBar_width;
     
     /*attack box*/
@@ -73,6 +73,10 @@ public class Player extends Entity {
     
     public void update() {
         updateHealthBar();
+        if (currentHealth <= 0) {
+            playing.setGameOver(true);
+            return;
+        }      
         updateAttackBox();
         updatePosition();
         if (attacking) checkAttack();
@@ -106,8 +110,8 @@ public class Player extends Entity {
                     (int) (hitBox.y - yDrawOffset), 
                     width * flipW, 
                     height, null);
-        drawHitBox(g, lvlOffset);
-        drawAttackBox(g, lvlOffset);
+        //drawHitBox(g, lvlOffset);
+        //drawAttackBox(g, lvlOffset);
         drawUI(g);
     }
     
@@ -314,6 +318,21 @@ public class Player extends Entity {
     /*attacking*/   
     public void setAttack (boolean attacking) {
         this.attacking = attacking;       
+    }
+    
+    public void resetAll() {
+        resetDirBooleans ();
+        inAir = false;
+        attacking = false;
+        moving = false;
+        player_action = IDLE;
+        currentHealth = maxHealth;
+        
+        hitBox.x = x;
+        hitBox.y = y;
+        
+        if(!EntityFloor(hitBox, lvlData)) inAir = true;
+        
     }
 
     

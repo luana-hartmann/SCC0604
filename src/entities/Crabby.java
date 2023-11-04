@@ -49,7 +49,6 @@ public class Crabby extends Enemy {
         } else {
             switch(enemyState) {
                 case IDLE:
-                    //enemyState = RUNNING;
                     newState (RUNNING);
                     break;
                 case RUNNING:                   
@@ -57,7 +56,6 @@ public class Crabby extends Enemy {
                         towardsPlayer(player);
                     if(closeForAttack(player))
                         newState(ATTACK);
-                        //enemyState = ATTACK;
                     
                     move(lvlData);
                     break;
