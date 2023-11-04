@@ -1,5 +1,6 @@
 package entities;
 
+import gamestates.Playing;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -15,6 +16,7 @@ import utilz.LoadSave;
 
 public class Player extends Entity {
     
+    private Playing playing;
     private BufferedImage[][] animations;
     private int aniTick, aniIndex, aniSpeed = 15;
     private int player_action = IDLE;
@@ -54,9 +56,12 @@ public class Player extends Entity {
     
     private int flipX = 0, flipW = 1;
     
+    private boolean attackChecked = false;
+    
  
-    public Player(float x, float y, int width, int height) {
+    public Player(float x, float y, int width, int height, Playing playing) {
 	super(x, y, width, height);
+        this.playing = playing;
 	loadAnimations();
         initHitBox(x, y, (int)(20 * (Game.SCALE)),(int) (27 * Game.SCALE)); /*video 9*/
         initAttackBox ();
@@ -70,8 +75,16 @@ public class Player extends Entity {
         updateHealthBar();
         updateAttackBox();
         updatePosition();
+        if (attacking) checkAttack();
         updateAnimationTick();
         setAnimation();
+    }
+    
+    private void checkAttack () {
+        if (attackChecked || aniIndex != 1)
+            return;
+        attackChecked = true;
+        playing.checkEnemyHit(attackBox);
     }
     
     private void updateAttackBox () {
@@ -118,6 +131,7 @@ public class Player extends Entity {
             if (aniIndex >= GetSpriteAmount(player_action)){
                 aniIndex = 0;
                 attacking = false;
+                attackChecked = false;
             }                              
         }        
     }
@@ -134,7 +148,13 @@ public class Player extends Entity {
             else player_action = FALL;
         }
        
-        if (attacking) player_action = ATTACK;
+        if (attacking) {
+            player_action = ATTACK;
+            if (startAni != ATTACK) {
+                aniIndex = 1;
+                aniTick = 0;
+            }
+        }
         
         if (startAni != player_action)
             resetAniTIck();
