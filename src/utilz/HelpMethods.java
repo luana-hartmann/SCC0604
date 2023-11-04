@@ -80,7 +80,10 @@ public class HelpMethods {
     }
     
     public static boolean IsFloor (Rectangle2D.Float hitBox, float xSpeed, int[][] lvlData) {
-        return IsSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvlData);       
+        if (xSpeed > 0)
+            return IsSolid(hitBox.x + xSpeed + hitBox.width, hitBox.y + hitBox.height + 1, lvlData); 
+        else
+            return IsSolid(hitBox.x + xSpeed, hitBox.y + hitBox.height + 1, lvlData);       
     }
     
     public static boolean sightClear_aux (int xSmaller, int xBigger, int y, int[][] lvlData) {
