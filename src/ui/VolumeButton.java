@@ -2,8 +2,9 @@ package ui;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import static utilz.Constants.UI.VolumeButton.*;
+
 import utilz.LoadSave;
+import static utilz.Constants.UI.VolumeButton.*;
 
 public class VolumeButton extends PauseButton {
     
@@ -41,7 +42,7 @@ public class VolumeButton extends PauseButton {
     
     public void draw(Graphics g) {
         
-        g.drawImage(slider, x+10, y, width, height, null);
+        g.drawImage(slider, x, y, width, height, null);
         g.drawImage(imgs[index], buttonX - VOLUME_WIDTH/2, y, VOLUME_WIDTH, height, null);
         
     }

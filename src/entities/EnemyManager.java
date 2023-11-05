@@ -1,10 +1,11 @@
 package entities;
 
-import gamestates.Playing;
 import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
+import gamestates.Playing;
 import levels.Level;
 import utilz.LoadSave;
 import static utilz.Constants.EnemyConstants.*;
@@ -18,7 +19,6 @@ public class EnemyManager {
     public EnemyManager (Playing playing) {
         this.playing = playing;
         loadEnemyImgs();
-        //loadEnemies();
     }
     
     public void loadEnemies (Level level) {
@@ -44,7 +44,7 @@ public class EnemyManager {
     private void drawCrabs(Graphics g, int xLvlOffset) {
         for (Crabby c : crabbies)
             if (c.isActive()){
-                g.drawImage(crabbyArr[c.getEnemyState()][c.getAniIndex()], 
+                g.drawImage(crabbyArr[c.getState()][c.getAniIndex()], 
                             (int)c.getHitBox().x - xLvlOffset - CRABBY_DRAWOFFSET_X + c.flipX(), 
                             (int)c.getHitBox().y - CRABBY_DRAWOFFSET_Y, 
                             CRABBY_WIDTH * c.flipW(), 

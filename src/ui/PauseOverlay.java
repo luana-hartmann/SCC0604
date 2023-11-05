@@ -1,17 +1,16 @@
 package ui;
 
-import gamestates.Gamestate;
-import gamestates.Playing;
 import java.awt.Graphics;
-import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+
 import main.Game;
+import gamestates.Playing;
+import gamestates.Gamestate;
+import utilz.LoadSave;
 import static utilz.Constants.UI.PauseButtons.*;
 import static utilz.Constants.UI.UrmButtons.*;
 import static utilz.Constants.UI.VolumeButton.*;
-import utilz.LoadSave;
-import gamestates.Playing;
 
 public class PauseOverlay {
     
@@ -102,6 +101,7 @@ public class PauseOverlay {
             musicButton.setMousePressed(true);
         else if (isIn(e, sfxButton))
             sfxButton.setMousePressed(true);
+        
         /*urm buttons*/
         else if (isIn(e, menuB))
             menuB.setMousePressed(true);
@@ -123,6 +123,7 @@ public class PauseOverlay {
             if(sfxButton.isMousePressed())
                 sfxButton.setMuted(!sfxButton.isMuted());
         }
+        
         /*urm buttons*/
         else if (isIn(e, menuB)) {
             if(menuB.isMousePressed())
@@ -132,13 +133,11 @@ public class PauseOverlay {
             if(replayB.isMousePressed()) {
                 playing.resetAll();
                 playing.unpauseGame();
-                System.out.println("REPLAY LVL");
             }
         }
         else if (isIn(e, unpausedB)) {
             if(unpausedB.isMousePressed()) 
                 playing.unpauseGame();
-                //System.out.println("UNPAUSED");
         }
         
         /*reset buttons*/
@@ -163,6 +162,7 @@ public class PauseOverlay {
             musicButton.setMouseOver(true);
         else if (isIn(e, sfxButton))
             sfxButton.setMouseOver(true);
+        
         /*urm buttons*/
         else if (isIn(e, menuB))
             menuB.setMouseOver(true);
@@ -176,7 +176,5 @@ public class PauseOverlay {
     
     private boolean isIn (MouseEvent e, PauseButton b) {
         return b.getBounds().contains(e.getX(), e.getY());
-    }
-
-    
+    }   
 }

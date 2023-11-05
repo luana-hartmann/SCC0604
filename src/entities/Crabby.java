@@ -1,25 +1,19 @@
 package entities;
 
-import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
+
 import main.Game;
 import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;
-import static utilz.HelpMethods.CanMoveHere;
-import static utilz.HelpMethods.EntityFloor;
-import static utilz.HelpMethods.GetPositionRoofFloor;
-import static utilz.HelpMethods.IsFloor;
 
 public class Crabby extends Enemy {
     
     /*attack box for crabby*/
-    private Rectangle2D.Float attackBox;
     private int attackBoxOffset;
     
     public Crabby(float x, float y) {
         super(x, y, CRABBY_WIDTH, CRABBY_HEIGHT, CRABBY);
-        initHitBox(x, y,(int) (22 * Game.SCALE), (int)(19 * Game.SCALE));
+        initHitBox(22, 19);
         initAttackBox();
     }
     
@@ -39,7 +33,7 @@ public class Crabby extends Enemy {
         attackBox.y = hitBox.y;
     }
     
-    /*calculate how the enemy is gonna be able to patrol and move around*/
+    /*calculates how the enemy is gonna be able to patrol and move around*/
     public void updateBehavior (int[][] lvlData, Player player) {
         if (firstUpdate) {
             firstUpdateCheck(lvlData);
@@ -47,7 +41,7 @@ public class Crabby extends Enemy {
         if (inAir) {
             updateInAir (lvlData);
         } else {
-            switch(enemyState) {
+            switch(state) {
                 case IDLE:
                     newState (RUNNING);
                     break;
@@ -70,11 +64,6 @@ public class Crabby extends Enemy {
                      break;
             }
         }  
-    }
-    
-    public void drawAttackBox (Graphics g, int xLvlOffset) {
-        g.setColor(Color.red);
-        g.drawRect((int)(attackBox.x - xLvlOffset), (int)attackBox.y, (int)attackBox.width,(int) attackBox.height);
     }
     
     public int flipX () {

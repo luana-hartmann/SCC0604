@@ -1,7 +1,5 @@
 package gamestates;
 
-import entities.EnemyManager;
-import entities.Player;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -9,14 +7,16 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.Random;
-import levels.LevelManager;
+
 import main.Game;
-import static main.Game.SCALE;
+import entities.EnemyManager;
+import entities.Player;
+import levels.LevelManager;
 import ui.GameOverOverlay;
 import ui.LevelCompletedOverlay;
 import ui.PauseOverlay;
-import static utilz.Constants.Environment.*;
 import utilz.LoadSave;
+import static utilz.Constants.Environment.*;
 
 public class Playing extends State implements Statemethods {
     

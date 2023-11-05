@@ -1,10 +1,10 @@
 package gamestates;
 
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
+
 import main.Game;
 import ui.MenuButton;
 import utilz.LoadSave;
@@ -27,7 +27,7 @@ public class Menu extends State implements Statemethods{
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.MENU_BACKGROUND);
         menuWidth = (int)(backgroundImg.getWidth() * Game.SCALE);
         menuHeight = (int)(backgroundImg.getHeight() * Game.SCALE);
-        menuX = Game.GAME_WIDTH/2 - menuWidth / 2;
+        menuX = Game.GAME_WIDTH/2 - menuWidth/2;
         menuY = (int) (45 * Game.SCALE);
     }
     
@@ -45,8 +45,6 @@ public class Menu extends State implements Statemethods{
 
     @Override
     public void draw(Graphics g) {
-        // g.setColor(Color.black);
-        // g.drawString("MENU", Game.GAME_WIDTH/2, 200);
         g.drawImage(backgroundPink, 0, 0,Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         g.drawImage(backgroundImg, menuX, menuY,menuWidth, menuHeight, null);
         for (MenuButton mb : buttons)

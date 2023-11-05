@@ -1,17 +1,12 @@
 package main;
 
-import entities.Player;
+import java.awt.Graphics;
+
+import gamestates.Menu;
+import gamestates.Playing;
 import gamestates.Gamestate;
 import static gamestates.Gamestate.MENU;
 import static gamestates.Gamestate.PLAYING;
-import gamestates.Menu;
-import gamestates.Playing;
-import java.awt.Graphics;
-import levels.Level;
-import levels.LevelManager;
-import main.GameWindow;
-import main.GamePanel;
-import utilz.LoadSave;
 
 public class Game implements Runnable {
     
@@ -26,18 +21,15 @@ public class Game implements Runnable {
     
     public final static int TILES_DEFAULT_SIZE = 32;
     public final static float SCALE = 1f;
+    
     /*visible size, not actual size of the level*/
     public final static int TILES_IN_WIDTH = 26;
     public final static int TILES_IN_HEIGHT = 14;
     public final static int TILES_SIZE = (int) (TILES_DEFAULT_SIZE * SCALE);
     public final static int GAME_WIDTH = TILES_SIZE * TILES_IN_WIDTH;
     public final static int GAME_HEIGHT = TILES_SIZE * TILES_IN_HEIGHT;
-    
-    
-    
-    
+     
     public Game () {
-        //LoadSave.GetAllLevels();
         initClasses();
         panel = new GamePanel (this);
         window = new GameWindow (panel);
@@ -58,8 +50,6 @@ public class Game implements Runnable {
     }
     
     public void update () {
-        //player.update();
-        //levelManager.update();
         
         switch(Gamestate.state) {
             case PLAYING:

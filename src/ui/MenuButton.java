@@ -1,12 +1,12 @@
 package ui;
 
-import gamestates.Gamestate;
-import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import static utilz.Constants.UI.buttons.*;
+
+import gamestates.Gamestate;
 import utilz.LoadSave;
+import static utilz.Constants.UI.buttons.*;
 
 public class MenuButton {
     
@@ -38,12 +38,20 @@ public class MenuButton {
         imgs = new BufferedImage[3];
         BufferedImage temp = LoadSave.GetSpriteAtlas(LoadSave.MENU_BUTTONS);
         for (int i = 0; i < imgs.length; i++) {
-            imgs[i] = temp.getSubimage(i * B_WIDTH_DEFAULT, rowIndex * B_HEIGHT_DEFAULT, B_WIDTH_DEFAULT, B_HEIGHT_DEFAULT);
+            imgs[i] = temp.getSubimage(i * B_WIDTH_DEFAULT, 
+                                       rowIndex * B_HEIGHT_DEFAULT, 
+                                     B_WIDTH_DEFAULT,
+                                     B_HEIGHT_DEFAULT);
         }
     }
     
     public void draw (Graphics g) {
-        g.drawImage(imgs[index], xPosition - xOffsetCenter, yPosition, B_WIDTH, B_HEIGHT, null);
+        g.drawImage(imgs[index], 
+                    xPosition - xOffsetCenter, 
+                  yPosition, 
+               B_WIDTH,
+              B_HEIGHT,
+             null);
     }
     
     public void update() {

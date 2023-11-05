@@ -1,25 +1,23 @@
 package levels;
 
-import gamestates.Gamestate;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 import main.Game;
-import static main.Game.TILES_SIZE;
 import utilz.LoadSave;
+import gamestates.Gamestate;
 
 public class LevelManager {
     
     private Game game;
     private BufferedImage[] levelSprite;
-    //private Level lvlOne;
     private ArrayList<Level> levels;
     private int lvlIndex = 0;
 
     public LevelManager(Game game){
         this.game = game;
         importOutsideSprites();
-        //lvlOne = new Level(LoadSave.GetLevelData());
         levels = new ArrayList<>();
         buildLevels();
     }
@@ -48,7 +46,6 @@ public class LevelManager {
         for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
             for (int i = 0; i < levels.get(lvlIndex).getLevelData()[0].length; i++) {
                 int index = levels.get(lvlIndex).getSpriteIndex(i, j);
-                /*image x y width height observer*/
                 g.drawImage(levelSprite[index], i*Game.TILES_SIZE - lvlOffset, j*Game.TILES_SIZE, Game.TILES_SIZE, Game.TILES_SIZE,  null);
             }
         

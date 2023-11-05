@@ -1,13 +1,13 @@
 package inputs;
 
-import gamestates.Gamestate;
-import static gamestates.Gamestate.MENU;
-import static gamestates.Gamestate.PLAYING;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import main.GamePanel;
+import gamestates.Gamestate;
+import static gamestates.Gamestate.MENU;
+import static gamestates.Gamestate.PLAYING;
 
 public class MouseInputs implements MouseListener, MouseMotionListener{
     
@@ -22,9 +22,6 @@ public class MouseInputs implements MouseListener, MouseMotionListener{
             case PLAYING:
                 gamePanel.getGame().getPlaying().mouseClicked(e);
                 break;
-            //case MENU:
-                //gamePanel.getGame().getMenu().mouseClicked(e);
-                //break;
             default:
                 break;
         }

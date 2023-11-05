@@ -1,10 +1,11 @@
 package levels;
 
-import entities.Crabby;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 import main.Game;
+import entities.Crabby;
 import static utilz.HelpMethods.*;
 
 public class Level {
@@ -12,8 +13,8 @@ public class Level {
     private BufferedImage img;
     private int[][] lvlData;
     private ArrayList<Crabby> crabs;
-    private int lvlTilesWide,// = LoadSave.GetLevelData()[0].length, /*max value of the leveloffset*/
-                maxTilesOffset,// = lvlTilesWide - Game.TILES_IN_WIDTH, /*how many tiles we can actually see*/
+    private int lvlTilesWide, /*max value of the leveloffset*/
+                maxTilesOffset, /*how many tiles we can actually see*/
                 maxLvlOffsetX;
     private Point playerSpawn;
     

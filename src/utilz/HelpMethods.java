@@ -1,15 +1,14 @@
 package utilz;
 
-import entities.Crabby;
 import java.awt.Color;
 import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+
 import main.Game;
+import entities.Crabby;
 import static utilz.Constants.EnemyConstants.CRABBY;
-import static utilz.LoadSave.GetSpriteAtlas;
-import static utilz.LoadSave.LEVEL_ONE_DATA;
 
 public class HelpMethods {
     
@@ -117,7 +116,6 @@ public class HelpMethods {
     }
     
     public static int[][] GetLevelData (BufferedImage img) {
-        //BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         int [][]lvlData = new int[img.getHeight()][img.getWidth()]; 
         
         for (int j = 0; j < img.getHeight(); j++)
@@ -132,7 +130,6 @@ public class HelpMethods {
     }
     
     public static ArrayList<Crabby> GetCrabs (BufferedImage img) {
-        //BufferedImage img = GetSpriteAtlas(LEVEL_ONE_DATA);
         ArrayList<Crabby> list = new ArrayList<>();
         
         for (int j = 0; j < img.getHeight(); j++)
