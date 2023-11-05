@@ -5,6 +5,7 @@ import java.awt.Graphics;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import levels.Level;
 import utilz.LoadSave;
 import static utilz.Constants.EnemyConstants.*;
 
@@ -17,18 +18,23 @@ public class EnemyManager {
     public EnemyManager (Playing playing) {
         this.playing = playing;
         loadEnemyImgs();
-        addEnemies();
+        //loadEnemies();
     }
     
-    private void addEnemies () {
-        crabbies = LoadSave.GetCrabs();
-        System.out.println("size of crabbies: "+crabbies.size());
+    public void loadEnemies (Level level) {
+        crabbies = level.getCrabs();
+        //System.out.println("number of crabbies: " + crabbies.size());
     }
     
     public void update(int[][] lvlData, Player player) {
+        boolean isActive = false;
         for (Crabby c : crabbies)
-            if (c.isActive())
-            c.update(lvlData, player);
+            if (c.isActive()){
+                c.update(lvlData, player);
+                isActive = true;
+            }
+        if (!isActive)
+            playing.setLevelCompleted(true);
     }
     
     public void draw (Graphics g, int xLvlOffset) {

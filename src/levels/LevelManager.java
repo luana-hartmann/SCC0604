@@ -1,7 +1,9 @@
 package levels;
 
+import gamestates.Gamestate;
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import main.Game;
 import static main.Game.TILES_SIZE;
 import utilz.LoadSave;
@@ -10,18 +12,42 @@ public class LevelManager {
     
     private Game game;
     private BufferedImage[] levelSprite;
-    private Level lvlOne;
+    //private Level lvlOne;
+    private ArrayList<Level> levels;
+    private int lvlIndex = 0;
 
     public LevelManager(Game game){
         this.game = game;
         importOutsideSprites();
-        lvlOne = new Level(LoadSave.GetLevelData());
+        //lvlOne = new Level(LoadSave.GetLevelData());
+        levels = new ArrayList<>();
+        buildLevels();
+    }
+    
+    public void loadNextLevel () {
+        lvlIndex++;
+        if (lvlIndex >= levels.size()) {
+            lvlIndex = 0;
+            System.out.println("NO MORE LEVELS! GAME COMPLETED!");
+            Gamestate.state = Gamestate.MENU;
+        } 
+        
+        Level newLevel = levels.get(lvlIndex);
+        game.getPlaying().getEnemyManager().loadEnemies(newLevel);
+        game.getPlaying().getPlayer().loadLvlData(newLevel.getLevelData());
+        game.getPlaying().setMAXLvlOffset(newLevel.getLvlOffset());
+    }
+    
+    private void buildLevels() {
+        BufferedImage[] allLevels = LoadSave.GetAllLevels();
+        for (BufferedImage img : allLevels)
+            levels.add(new Level(img));
     }
     
     public void draw (Graphics g, int lvlOffset) {
         for (int j = 0; j < Game.TILES_IN_HEIGHT; j++)
-            for (int i = 0; i < lvlOne.getLevelData()[0].length; i++) {
-                int index = lvlOne.getSpriteIndex(i, j);
+            for (int i = 0; i < levels.get(lvlIndex).getLevelData()[0].length; i++) {
+                int index = levels.get(lvlIndex).getSpriteIndex(i, j);
                 /*image x y width height observer*/
                 g.drawImage(levelSprite[index], i*Game.TILES_SIZE - lvlOffset, j*Game.TILES_SIZE, Game.TILES_SIZE, Game.TILES_SIZE,  null);
             }
@@ -33,7 +59,11 @@ public class LevelManager {
     }
     
     public Level getCurrentLevel () {
-        return lvlOne;
+        return levels.get(lvlIndex);
+    }
+    
+    public int amountLevels () {
+        return levels.size();
     }
 
     private void importOutsideSprites() {

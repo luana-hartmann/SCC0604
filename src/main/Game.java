@@ -11,6 +11,7 @@ import levels.Level;
 import levels.LevelManager;
 import main.GameWindow;
 import main.GamePanel;
+import utilz.LoadSave;
 
 public class Game implements Runnable {
     
@@ -36,6 +37,7 @@ public class Game implements Runnable {
     
     
     public Game () {
+        //LoadSave.GetAllLevels();
         initClasses();
         panel = new GamePanel (this);
         window = new GameWindow (panel);

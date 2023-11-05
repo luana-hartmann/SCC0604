@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import javax.imageio.ImageIO;
 import java.awt.Graphics;
+import java.awt.Point;
 import java.awt.geom.Rectangle2D;
 import main.Game;
 import static utilz.Constants.Directions.*;
@@ -65,6 +66,13 @@ public class Player extends Entity {
 	loadAnimations();
         initHitBox(x, y, (int)(20 * (Game.SCALE)),(int) (27 * Game.SCALE)); /*video 9*/
         initAttackBox ();
+    }
+    
+    public void setSpawn (Point spawn) {
+        this.x = spawn.x;
+        this.y = spawn.y;
+        hitBox.x = x;
+        hitBox.y = y;
     }
     
     private void initAttackBox () {

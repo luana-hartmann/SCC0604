@@ -59,7 +59,7 @@ public class PauseOverlay {
         backgroundImg = LoadSave.GetSpriteAtlas(LoadSave.PAUSE_BACKGROUND);
         bgW = (int)(backgroundImg.getWidth() * Game.SCALE);
         bgH = (int)(backgroundImg.getHeight() * Game.SCALE);
-        bgX = Game.GAME_WIDTH/2 - bgW/2 -60;
+        bgX = Game.GAME_WIDTH/2 - bgW/2;
         bgY = (int)(25*Game.SCALE);
     }
     
@@ -75,7 +75,7 @@ public class PauseOverlay {
     
     public void draw (Graphics g) {
         /*background pause*/
-        g.drawImage(backgroundImg, bgX, bgY, bgH, bgH, null);
+        g.drawImage(backgroundImg, bgX, bgY, bgW, bgH, null);
         
         /*music buttons*/
         musicButton.draw(g);
