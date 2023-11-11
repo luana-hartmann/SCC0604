@@ -1,4 +1,4 @@
-package utilz;
+  package utilz;
 
 
 import java.awt.image.BufferedImage;
@@ -31,6 +31,8 @@ public class LoadSave {
     public static final String URM_BUTTONS = "urm_buttons.png";
     public static final String SOUND_BUTTONS = "sound_button.png";
     public static final String VOLUME_BUTTONS = "volume_buttons.png";
+    /*dead screen*/
+    public static final String DEAD_BACKGROUND = "death_screen.png";
 
     public static BufferedImage[] GetAllLevels(){
         URL url = LoadSave.class.getResource("/lvls");

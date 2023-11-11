@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import main.Game;
 import gamestates.Gamestate;
 import gamestates.Playing;
+import java.awt.Color;
 import utilz.LoadSave;
 import static utilz.Constants.UI.UrmButtons.*;
 
@@ -46,6 +47,8 @@ public class LevelCompletedOverlay {
     }
     
     public void draw (Graphics g) {
+        g.setColor(new Color(0,0,0,150));
+        g.fillRect(0, 0, Game.GAME_WIDTH, Game.GAME_WIDTH);
         g.drawImage(img, bgX, bgY, bgW, bgH, null);
 
         next.draw(g);
@@ -70,13 +73,11 @@ public class LevelCompletedOverlay {
         if (isIn(e, next)) {
             if(next.isMousePressed()){
                 playing.loadNextLevel();
-                System.out.println("next");
             }           
         } else if (isIn(e, menu)) {
             if(menu.isMousePressed()) {
                 playing.resetAll();
                 Gamestate.state = Gamestate.MENU;
-                System.out.println("menu");
             }
         }
         

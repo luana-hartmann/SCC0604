@@ -57,7 +57,7 @@ public class Constants {
         public static int GetEnemyDamage (int enemy_type) {
             switch (enemy_type) {
                 case CRABBY:
-                    return 15; 
+                    return 10; 
                 default:
                     return 0;
             }

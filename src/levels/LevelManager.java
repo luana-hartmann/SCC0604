@@ -27,8 +27,12 @@ public class LevelManager {
         if (lvlIndex >= levels.size()) {
             lvlIndex = 0;
             System.out.println("NO MORE LEVELS! GAME COMPLETED!");
+            System.out.println("Criadores:\nLuana Hartmann Franco da Cruz\nJoao Pedro Gomes");
             Gamestate.state = Gamestate.MENU;
         } 
+        else {
+            System.out.println("NEXT LEVEL");
+        }
         
         Level newLevel = levels.get(lvlIndex);
         game.getPlaying().getEnemyManager().loadEnemies(newLevel);

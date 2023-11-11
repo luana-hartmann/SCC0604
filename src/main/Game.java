@@ -59,7 +59,9 @@ public class Game implements Runnable {
                 menu.update();
                 break;
             case OPTIONS:
+                System.out.println("Sorry, no options available.");
             case QUIT:
+                System.out.println("QUIT");
             default:
                 System.exit(0);
                 break;
