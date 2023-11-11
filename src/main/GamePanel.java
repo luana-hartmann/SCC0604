@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import inputs.KeyboardInputs;
 import inputs.MouseInputs;
 
+import data.Save;
 import static main.Game.GAME_HEIGHT;
 import static main.Game.GAME_WIDTH;
 

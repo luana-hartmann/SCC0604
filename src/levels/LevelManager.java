@@ -1,9 +1,11 @@
 package levels;
 
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
+import data.Save;
 import main.Game;
 import utilz.LoadSave;
 import gamestates.Gamestate;
@@ -13,13 +15,17 @@ public class LevelManager {
     private Game game;
     private BufferedImage[] levelSprite;
     private ArrayList<Level> levels;
-    private int lvlIndex = 0;
+    public int lvlIndex = 0;
+    
+    /*saving*/
+    public Save save = new Save(this);
 
     public LevelManager(Game game){
         this.game = game;
         importOutsideSprites();
         levels = new ArrayList<>();
         buildLevels();
+        save.load();
     }
     
     public void loadNextLevel () {
@@ -29,6 +35,7 @@ public class LevelManager {
             System.out.println("NO MORE LEVELS! GAME COMPLETED!");
             System.out.println("Criadores:\nLuana Hartmann Franco da Cruz\nJoao Pedro Gomes");
             Gamestate.state = Gamestate.MENU;
+            save.save();
         } 
         else {
             System.out.println("NEXT LEVEL");

@@ -100,7 +100,7 @@ public class Playing extends State implements Statemethods {
     }
 
     @Override
-    public void update() {
+    public void update() {                       
         
         if (paused) {
             pauseOverlay.update();
@@ -134,7 +134,6 @@ public class Playing extends State implements Statemethods {
     public void draw(Graphics g) {
         g.drawImage(backgroundImg, 0, 0, Game.GAME_WIDTH, Game.GAME_HEIGHT, null);
         drawClouds(g);
-        
         levelManager.draw(g, xLvlOffset);
         player.render(g, xLvlOffset);
         enemyManager.draw(g, xLvlOffset);
@@ -239,6 +238,10 @@ public class Playing extends State implements Statemethods {
                     Gamestate.state = Gamestate.MENU;
                 case KeyEvent.VK_ESCAPE:
                     paused = !paused;
+                    break;
+                case KeyEvent.VK_S:
+                    levelManager.save.save();
+                    System.out.println("GAME SAVE");
                     break;
             }
     }

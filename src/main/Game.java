@@ -1,5 +1,6 @@
 package main;
 
+import data.Save;
 import java.awt.Graphics;
 
 import gamestates.Menu;
@@ -7,11 +8,14 @@ import gamestates.Playing;
 import gamestates.Gamestate;
 import static gamestates.Gamestate.MENU;
 import static gamestates.Gamestate.PLAYING;
+import levels.LevelManager;
 
 public class Game implements Runnable {
     
     private GameWindow window;
     private GamePanel panel;
+    private LevelManager levelManager = new LevelManager(this);
+    private Save save = new Save(levelManager);
     private Thread gameThread;
     private final int FPS_SET = 120;
     private final int UPS_SET = 200;
@@ -55,11 +59,14 @@ public class Game implements Runnable {
             case PLAYING:
                 playing.update();
                 break;
-            case MENU:
+            case MENU:               
                 menu.update();
                 break;
             case OPTIONS:
-                System.out.println("Sorry, no options available.");
+                levelManager.lvlIndex = 0;
+                levelManager.save.save();
+                System.out.println("GAME RESTARTED. OPEN AGAIN.");
+                Gamestate.state = MENU;
             case QUIT:
                 System.out.println("QUIT");
             default:
