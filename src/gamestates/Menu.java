@@ -10,6 +10,7 @@ import ui.MenuButton;
 import utilz.LoadSave;
 import static utilz.LoadSave.MENU_BACKGROUND_IMG;
 
+/*defines the menu state*/
 public class Menu extends State implements Statemethods{
     
     private MenuButton[] buttons = new MenuButton[3];
@@ -33,7 +34,7 @@ public class Menu extends State implements Statemethods{
     
     private void loadButtons() {
         buttons[0] = new MenuButton(Game.GAME_WIDTH/2, (int)(150*Game.SCALE),0,Gamestate.PLAYING);
-        buttons[1] = new MenuButton(Game.GAME_WIDTH/2, (int)(220*Game.SCALE),1,Gamestate.OPTIONS); ///////////////////////
+        buttons[1] = new MenuButton(Game.GAME_WIDTH/2, (int)(220*Game.SCALE),1,Gamestate.RESTART); ///////////////////////
         buttons[2] = new MenuButton(Game.GAME_WIDTH/2, (int)(290*Game.SCALE),2,Gamestate.QUIT);
     }
 

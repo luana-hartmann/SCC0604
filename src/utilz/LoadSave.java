@@ -9,6 +9,8 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import javax.imageio.ImageIO;
 
+/*constants for the png files*/
+/*loads all the levels and sprites for the entities*/
 public class LoadSave {
     
     /*player*/

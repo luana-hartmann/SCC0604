@@ -5,6 +5,7 @@ import java.awt.event.MouseEvent;
 import main.Game;
 import ui.MenuButton;
 
+/*class to help manage the change of states*/
 public class State {
     
     protected Game game;

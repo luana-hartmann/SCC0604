@@ -6,6 +6,7 @@ import main.Game;
 import static utilz.Constants.Directions.*;
 import static utilz.Constants.EnemyConstants.*;
 
+/*pulic class for the enemy type "crabby"*/
 public class Crabby extends Enemy {
     
     /*attack box for crabby*/

@@ -10,6 +10,7 @@ import gamestates.Playing;
 import java.awt.image.BufferedImage;
 import utilz.LoadSave;
 
+/*overlay when the player dies*/
 public class GameOverOverlay {
     
     private Playing playing;

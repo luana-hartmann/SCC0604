@@ -6,20 +6,26 @@ import java.awt.geom.Rectangle2D;
 
 import main.Game;
 
+/*abstract class for all the entities in the game*/
 public abstract class Entity {
     
     /*private means only this class can use the variable*/
     /*protected means only classes that extends this abstract can use this variable*/
+    
+    /*parameters for the hitbox*/
     protected float x, y;
     protected int width, height;
     protected Rectangle2D.Float hitBox;
     protected Rectangle2D.Float attackBox;
     
+    /*state parameters (walking, falling, etc)*/
     protected float walkSpeed;
     protected int aniTick, aniIndex;
     protected int state;
     protected float airSpeed;
     protected boolean inAir = false;
+    
+    /*health parameters*/
     protected int maxHealth;
     protected int currentHealth;
 

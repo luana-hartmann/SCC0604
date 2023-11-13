@@ -8,6 +8,7 @@ import main.Game;
 import entities.Crabby;
 import static utilz.HelpMethods.*;
 
+/*class that defines the parameters of the level*/
 public class Level {
     
     private BufferedImage img;

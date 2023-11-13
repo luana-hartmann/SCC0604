@@ -13,14 +13,17 @@ import static utilz.Constants.*;
 import static utilz.Constants.PlayerConstants.*;
 import static utilz.HelpMethods.*;
 
+/*public class for the player*/
 public class Player extends Entity {
     
+    /*game parameters*/
     private Playing playing;
+    private int[][] lvlData;
+    
+    /*state parameters*/
     private BufferedImage[][] animations;    
     private boolean moving = false, attacking = false;
-    private boolean left, right, jump;
-   
-    private int[][] lvlData;
+    private boolean left, right, jump;   
     private float xDrawOffset = 21 * Game.SCALE;
     private float yDrawOffset = 4 * Game.SCALE;
     
@@ -30,20 +33,25 @@ public class Player extends Entity {
     
     /*status bar ui*/
     private BufferedImage statusBarImg;
+    
     /*position and size of the status bar*/
     private int statusBar_width = (int) (192 * Game.SCALE);
     private int statusBar_height = (int) (58 * Game.SCALE);
     private int statusBar_x = (int) (10 * Game.SCALE);
     private int statusBar_y = (int) (10 * Game.SCALE);
+    
     /*position and size of the actual bar*/
     private int healthBar_width = (int) (150 * Game.SCALE);
     private int healthBar_height = (int) (4 * Game.SCALE);
     private int healthBar_x = (int) (34 * Game.SCALE);
     private int healthBar_y = (int) (14 * Game.SCALE);
+    
     /*manage the health bar*/
     private int health_width = healthBar_width;
+    
     /*manage the direction of the sprite*/
     private int flipX = 0, flipW = 1;
+    
     /*manage the attack*/
     private boolean attackChecked = false;
     
@@ -56,7 +64,7 @@ public class Player extends Entity {
         this.currentHealth = maxHealth;
         this.walkSpeed = 1.0f * Game.SCALE;
 	loadAnimations();
-        initHitBox(20,27); /*video 9*/
+        initHitBox(20,27);
         initAttackBox ();
     }
     
@@ -231,8 +239,7 @@ public class Player extends Entity {
             hitBox.x += x_speed;
         } else {
             hitBox.x = GetEntityPositionWall (hitBox, x_speed);
-        }
-            
+        }        
     }
     
     public void changeHealth(int value) {
@@ -252,7 +259,6 @@ public class Player extends Entity {
         animations = new BufferedImage[7][8];        
         for (int j = 0; j < animations.length; j++)
             for (int i = 0; i < animations[j].length; i++)
-                // animations[j][i] = img.getSubimage(i*64, j*40,56,72);
                 animations[j][i] = img.getSubimage(i*64, j*40,64,40);
         
         statusBarImg = LoadSave.GetSpriteAtlas(LoadSave.STATUS_BAR);
@@ -269,7 +275,7 @@ public class Player extends Entity {
         right = false;
     }
 
-    /*getter and setter of directions*/    
+    /*getters and setters of directions*/    
     public void setLeft(boolean left) {
         this.left = left;
     }
@@ -308,7 +314,5 @@ public class Player extends Entity {
         
         if(!EntityFloor(hitBox, lvlData)) inAir = true;
         
-    }
-
-    
+    }  
 }

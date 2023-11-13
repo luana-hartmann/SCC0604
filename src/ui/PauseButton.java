@@ -2,6 +2,7 @@ package ui;
 
 import java.awt.Rectangle;
 
+/*constructs the pause buttons and their features*/
 public class PauseButton {
     
     protected int x, y, width, height;

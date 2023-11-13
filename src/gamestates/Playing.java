@@ -21,27 +21,33 @@ import static utilz.Constants.Environment.*;
 public class Playing extends State implements Statemethods {
     
     private Player player;
+    
+    /*managers*/
     private LevelManager levelManager;
     private EnemyManager enemyManager;
+    
+    /*overlays during playing*/
     private PauseOverlay pauseOverlay;
     private GameOverOverlay gameOverOverlay;
     private LevelCompletedOverlay levelCompletedOverlay;
-    private boolean paused = false;
     
+    /*states*/
+    protected boolean paused = false;
+    protected boolean gameOver;
+    protected boolean levelCompleted = false;
+    
+    /*window size*/
     private int xLvlOffset, 
                 leftBorder = (int) (0.2 * Game.GAME_WIDTH), 
                 rightBorder = (int) (0.8 * Game.GAME_WIDTH),
-                //lvlTilesWide = LoadSave.GetLevelData()[0].length, /*max value of the leveloffset*/
-                //maxTilesOffset = lvlTilesWide - Game.TILES_IN_WIDTH, /*how many tiles we can actually see*/
-                maxLvlOffsetX;// = maxTilesOffset * Game.TILES_SIZE; /*turning to pixels*/
+                maxLvlOffsetX;
     
-    
+    /*background features*/
     private BufferedImage backgroundImg, bigCloud, smallCloud;
     private int[] smallCloudsPosition; /*random y values for small clouds*/
     private Random rnd = new Random();
     
-    private boolean gameOver;
-    private boolean levelCompleted = false;
+    
 
     public Playing(Game game) {
         super(game);
@@ -77,7 +83,6 @@ public class Playing extends State implements Statemethods {
     private void initClasses () {
         levelManager = new LevelManager(game);
         enemyManager = new EnemyManager(this);
-        // player = new Player (200,200, (int)(64*SCALE),(int)(64*SCALE));
         player = new Player (200,200, (int)(64*Game.SCALE),(int)(40*Game.SCALE), this);
         player.loadLvlData(levelManager.getCurrentLevel().getLevelData());    
         player.setSpawn(levelManager.getCurrentLevel().getPlayerSpawn());
@@ -267,11 +272,25 @@ public class Playing extends State implements Statemethods {
     }
     
     public void unpauseGame () {
-        //System.out.println("unpausedGame");
         paused = false;
     }
-    
+
     public void setLevelCompleted (boolean levelCompleted) {
         this.levelCompleted = levelCompleted;
     }
+    
+    public boolean isPaused() {
+        return paused;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public boolean isLevelCompleted() {
+        return levelCompleted;
+    }
+    
+    
+    
 }

@@ -1,0 +1,768 @@
+@startuml poo
+
+class Main {
+  + main(String[] args): void
+    + Game()
+}
+
+class Game {
+  - window: GameWindow
+  - panel: GamePanel
+  - levelManager: LevelManager
+  - save: Save
+  - gameThread: Thread
+  - FPS_SET: int
+  - UPS_SET: int
+  - playing: Playing
+  - menu: Menu
+  + TILES_DEFAULT_SIZE: int
+  + SCALE: float
+  + TILES_IN_WIDTH: int
+  + TILES_IN_HEIGHT: int
+  + TILES_SIZE: int
+  + GAME_WIDTH: int
+  + GAME_HEIGHT: int
+  + Game()
+  - initClasses(): void
+  - startGameLoop(): void
+  + update(): void
+  + render(g: Graphics): void
+  + run(): void
+  + windowFocusLost(): void
+  + getMenu(): Menu
+  + getPlaying(): Playing
+}
+
+class GamePanel {
+  - mouseInputs: MouseInputs
+  - game: Game
+
+  + GamePanel(game: Game)
+  + setPanelSize(): void
+  + updateGame(): void
+  + paintComponent(g: Graphics): void
+  + getGame(): Game
+}
+
+class GameWindow {
+  - jframe: JFrame
+
+  + GameWindow(panel: GamePanel)
+}
+
+Main --> Game
+
+Game <|-- Runnable
+Game --|> GameWindow
+Game --|> GamePanel
+Game --|> LevelManager
+Game --|> Save
+Game --|> Playing
+Game --|> Menu
+
+GamePanel --> MouseInputs
+GamePanel --> Game
+GamePanel --> KeyboardInputs
+GamePanel --> JPanel
+GamePanel --> Graphics
+GamePanel --> Dimension
+
+GameWindow --> JFrame
+GameWindow --> WindowFocusListener
+GameWindow --> GamePanel
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class KeyboardInputs  {
+  - gamePanel: GamePanel
+
+  + KeyboardInputs(gamePanel: GamePanel)
+  + keyTyped(e: KeyEvent): void
+  + keyReleased(e: KeyEvent): void
+  + keyPressed(e: KeyEvent): void
+}
+
+class MouseInputs {
+  - gamePanel: GamePanel
+
+  + MouseInputs(gamePanel: GamePanel)
+  + mouseClicked(e: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + mouseEntered(e: MouseEvent): void
+  + mouseExited(e: MouseEvent): void
+  + mouseDragged(e: MouseEvent): void
+  + mouseMoved(e: MouseEvent): void
+}
+
+KeyboardInputs <|-- KeyListener
+KeyboardInputs --|> GamePanel
+
+MouseInputs --|> GamePanel
+MouseInputs <|-- MouseListener
+MouseInputs <|-- MouseMotionListener
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+enum Gamestate {
+  PLAYING
+  MENU
+  OPTIONS
+  QUIT
+}
+
+class State {
+  - game: Game
+
+  + State(game: Game)
+  + isIn(e: MouseEvent, mb: MenuButton): boolean
+  + getGame(): Game
+}
+
+interface Statemethods {
+  + update(): void
+  + draw(g: Graphics): void
+  + mouseClicked(e: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + mouseMoved(e: MouseEvent): void
+  + keyPressed(e: KeyEvent): void
+  + keyReleased(e: KeyEvent): void
+}
+
+class Menu {
+  - buttons: MenuButton[]
+  - backgroundImg: BufferedImage
+  - backgroundPink: BufferedImage
+  - menuX: int
+  - menuY: int
+  - menuWidth: int
+  - menuHeight: int
+
+  + Menu(game: Game)
+  + loadBackground(): void
+  + loadButtons(): void
+  + update(): void
+  + draw(g: Graphics): void
+  + mouseClicked(e: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + resetButtons(): void
+  + mouseMoved(e: MouseEvent): void
+  + keyPressed(e: KeyEvent): void
+  + keyReleased(e: KeyEvent): void
+}
+
+class Playing {
+  - player: Player
+  - levelManager: LevelManager
+  - enemyManager: EnemyManager
+  - pauseOverlay: PauseOverlay
+  - gameOverOverlay: GameOverOverlay
+  - levelCompletedOverlay: LevelCompletedOverlay
+  - paused: boolean
+  - xLvlOffset: int
+  - leftBorder: int
+  - rightBorder: int
+  - maxLvlOffsetX: int
+  - backgroundImg: BufferedImage
+  - bigCloud: BufferedImage
+  - smallCloud: BufferedImage
+  - smallCloudsPosition: int[]
+  - rnd: Random
+  - gameOver: boolean
+  - levelCompleted: boolean
+
+  + Playing(game: Game)
+  + loadNextLevel(): void
+  + loadStartLevel(): void
+  + calcLvlOffset(): void
+  + initClasses(): void
+  + getPlayer(): Player
+  + getEnemyManager(): EnemyManager
+  + windowFocusLost(): void
+  + update(): void
+  + checkBorder(): void
+  + draw(g: Graphics): void
+  + drawClouds(g: Graphics): void
+  + resetAll(): void
+  + setGameOver(gameOver: boolean): void
+  + checkEnemyHit(attackBox: Rectangle2D.Float): void
+  + mouseClicked(e: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + mouseMoved(e: MouseEvent): void
+  + mouseDragged(e: MouseEvent): void
+  + keyPressed(e: KeyEvent): void
+  + keyReleased(e: KeyEvent): void
+  + setMAXLvlOffset(lvlOffset: int): void
+  + unpauseGame(): void
+  + setLevelCompleted(levelCompleted: boolean): void
+}
+
+State --> Game
+State --> MouseEvent
+State --> MenuButton
+State --> Rectangle
+State --|> Game
+
+Menu <|-- Statemethods
+
+Playing <|-- Statemethods
+Playing --> State
+Playing --|> Player
+Playing --|> LevelManager
+Playing --|> EnemyManager
+Playing --|> PauseOverlay
+Playing --|> GameOverOverlay
+Playing --|> LevelCompletedOverlay
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+abstract class Entity {
+  - x: float
+  - y: float
+  - width: int
+  - height: int
+  - hitBox: Rectangle2D.Float
+  - attackBox: Rectangle2D.Float
+  - walkSpeed: float
+  - aniTick: int
+  - aniIndex: int
+  - state: int
+  - airSpeed: float
+  - inAir: boolean
+  - maxHealth: int
+  - currentHealth: int
+
+  + Entity(x: float, y: float, width: int, height: int)
+  - drawAttackBox(g: Graphics, lvlOffsetX: int): void
+  - drawHitBox(g: Graphics, xLvlOffset: int): void
+  - initHitBox(width: int, height: int): void
+  + getHitBox(): Rectangle2D.Float
+  + getState(): int
+  + getAniIndex(): int
+}
+
+class Player {
+  - playing: Playing
+  - animations: BufferedImage[][]
+  - moving: boolean
+  - attacking: boolean
+  - left: boolean
+  - right: boolean
+  - jump: boolean
+  - lvlData: int[][]
+  - xDrawOffset: float
+  - yDrawOffset: float
+  - jump_speed: float
+  - fallSPeedCollision: float
+  - statusBarImg: BufferedImage
+  - statusBar_width: int
+  - statusBar_height: int
+  - statusBar_x: int
+  - statusBar_y: int
+  - healthBar_width: int
+  - healthBar_height: int
+  - healthBar_x: int
+  - healthBar_y: int
+  - health_width: int
+  - flipX: int
+  - flipW: int
+  - attackChecked: boolean
+  + Player(x: float, y: float, width: int, height: int, playing: Playing)
+  + setSpawn(spawn: Point): void
+  - initAttackBox(): void
+  + update(): void
+  - checkAttack(): void
+  - updateAttackBox(): void
+  - updateHealthBar(): void
+  + render(g: Graphics, lvlOffset: int): void
+  - drawUI(g: Graphics): void
+  - updateAnimationTick(): void
+  + setAnimation(): void
+  - resetAniTIck(): void
+  - updatePosition(): void
+  - jump(): void
+  + resetInAir(): void
+  - updateXPosition(x_speed: float): void
+  + changeHealth(value: int): void
+  - loadAnimations(): void
+  + loadLvlData(lvlData: int[][]): void
+  + resetDirBooleans(): void
+  + setLeft(left: boolean): void
+  + setRight(right: boolean): void
+  + setJump(jump: boolean): void
+  + isLeft(): boolean
+  + isRight(): boolean
+  + setAttack(attacking: boolean): void
+  + resetAll(): void
+}
+
+class EnemyManager {
+  - playing: Playing
+  - crabbyArr: BufferedImage[][]
+  - crabbies: ArrayList<Crabby>
+  + EnemyManager(playing: Playing)
+  + loadEnemies(level: Level): void
+  + update(lvlData: int[][], player: Player): void
+  + draw(g: Graphics, xLvlOffset: int): void
+  - drawCrabs(g: Graphics, xLvlOffset: int): void
+  + checkEnemyHit(attackBox: Rectangle2D.Float): void
+  - loadEnemyImgs(): void
+  + resetAllEnemies(): void
+}
+
+abstract class Enemy {
+  - enemyType: int
+  - firstUpdate: boolean
+  - walkDir: int
+  - tileY: int
+  - attackDist: int
+  - active: boolean
+  - attackChecked: boolean
+  - maxHealth: int
+  - currentHealth: int
+  - walkSpeed: float
+  - airSpeed: float
+  - state: int
+  - aniTick: int
+  - aniIndex: int
+  + Enemy(x: float, y: float, width: int, height: int, enemyType: int)
+  # firstUpdateCheck(lvlData: int[][]): void
+  # updateInAir(lvlData: int[][]): void
+  # move(lvlData: int[][]): void
+  # towardsPlayer(player: Player): void
+  # seePlayer(lvlData: int[][], player: Player): boolean
+  # playerInRange(player: Player): boolean
+  # closeForAttack(player: Player): boolean
+  # newState(enemyState: int): void
+  + hurt(amount: int): void
+  # checkEnemyHit(attackBox: Rectangle2D.Float, player: Player): void
+  # updateAnimationTick(): void
+  # changeWalkDir(): void
+  + resetEnemy(): void
+  + isActive(): boolean
+}
+
+class Crabby {
+  - attackBoxOffset: int
+  + Crabby(x: float, y: float)
+  + initAttackBox(): void
+  + update(lvlData: int[][], player: Player): void
+  + updateAttackBox(): void
+  + updateBehavior(lvlData: int[][], player: Player): void
+  + flipX(): int
+  + flipW(): int
+}
+
+Player --> Entity
+Enemy --> Entity
+Crabby --> Enemy
+
+Player --|> Playing
+
+EnemyManager --|> Playing
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class Level {
+  - img: BufferedImage
+  - lvlData: int[][]
+  - crabs: ArrayList<Crabby>
+  - lvlTilesWide: int
+  - maxTilesOffset: int
+  - maxLvlOffsetX: int
+  - playerSpawn: Point
+  + Level(img: BufferedImage)
+  + calcPlayerSpawn(): void
+  + getSpriteIndex(x: int, y: int): int
+  + getLevelData(): int[][]
+  + createLevelData(): void
+  + createEnemies(): void
+  + calcLvlOffset(): void
+  + getLvlOffset(): int
+  + getCrabs(): ArrayList<Crabby>
+  + getPlayerSpawn(): Point
+}
+
+class LevelManager {
+  - game: Game
+  - levelSprite: BufferedImage[]
+  - levels: ArrayList<Level>
+  - lvlIndex: int
+  - save: Save
+  + LevelManager(game: Game)
+  + loadNextLevel(): void
+  + buildLevels(): void
+  + draw(g: Graphics, lvlOffset: int): void
+  + update(): void
+  + getCurrentLevel(): Level
+  + amountLevels(): int
+  - importOutsideSprites(): void
+}
+
+
+LevelManager --|> Game
+LevelManager --|> Save
+LevelManager --|> Level
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class GameOverOverlay {
+  - playing: Playing
+  - img: BufferedImage
+  - bgX: int
+  - bgY: int
+  - bgW: int
+  - bgH: int
+  + GameOverOverlay(playing: Playing)
+  - initImg(): void
+  + draw(g: Graphics): void
+  + keyPressed(e: KeyEvent): void
+}
+
+class LevelCompletedOverlay {
+  - playing: Playing
+  - menu: UrmButton
+  - next: UrmButton
+  - img: BufferedImage
+  - bgX: int
+  - bgY: int
+  - bgW: int
+  - bgH: int
+  + LevelCompletedOverlay(playing: Playing)
+  - initImg(): void
+  - initButton(): void
+  + update(): void
+  + draw(g: Graphics): void
+  - isIn(e: MouseEvent, b: UrmButton): boolean
+  + mouseMoved(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+}
+
+class MenuButton {
+  - xPosition: int
+  - yPosition: int
+  - rowIndex: int
+  - index: int
+  - xOffsetCenter: int
+  - state: Gamestate
+  - imgs: BufferedImage[]
+  - mouseOver: boolean
+  - mousePressed: boolean
+  - bounds: Rectangle
+  + MenuButton(xPosition: int, yPosition: int, rowIndex: int, state: Gamestate)
+  - initBounds(): void
+  + getBounds(): Rectangle
+  - loadImgs(): void
+  + draw(g: Graphics): void
+  + update(): void
+  + isMouseOver(): boolean
+  + setMouseOver(mouseOver: boolean): void
+  + isMousePressed(): boolean
+  + setMousePressed(mousePressed: boolean): void
+  + applyGamestate(): void
+  + resetBools(): void
+}
+
+class PauseButton {
+  - x: int
+  - y: int
+  - width: int
+  - height: int
+  - bounds: Rectangle
+  + PauseButton(x: int, y: int, width: int, height: int)
+  + createBounds(): void
+  + getX(): int
+  + setX(x: int): void
+  + getY(): int
+  + setY(y: int): void
+  + getWidth(): int
+  + setWidth(width: int): void
+  + getHeight(): int
+  + setHeight(height: int): void
+  + getBounds(): Rectangle
+  + setBounds(bounds: Rectangle): void
+}
+
+class PauseOverlay {
+  - playing: Playing
+  - backgroundImg: BufferedImage
+  - bgX: int
+  - bgY: int
+  - bgW: int
+  - bgH: int
+  - musicButton: SoundButton
+  - sfxButton: SoundButton
+  - menuB: UrmButton
+  - replayB: UrmButton
+  - unpausedB: UrmButton
+  - volumeButton: VolumeButton
+  + PauseOverlay(playing: Playing)
+  + createVolumeButton(): void
+  + createUrmButton(): void
+  + creatSoundButton(): void
+  + loadBackground(): void
+  + update(): void
+  + draw(g: Graphics): void
+  + mouseDragged(e: MouseEvent): void
+  + mousePressed(e: MouseEvent): void
+  + mouseReleased(e: MouseEvent): void
+  + mouseMoved(e: MouseEvent): void
+  - isIn(e: MouseEvent, b: PauseButton): boolean
+}
+
+class SoundButton {
+  - soundImgs: BufferedImage[][]
+  - mouseOver: boolean
+  - mousePressed: boolean
+  - muted: boolean
+  - rowIndex: int
+  - colIndex: int
+  + SoundButton(x: int, y: int, width: int, height: int)
+  + loadSoundImgs(): void
+  + update(): void
+  + resetBools(): void
+  + draw(g: Graphics): void
+  + isMouseOver(): boolean
+  + setMouseOver(mouseOver: boolean): void
+  + isMousePressed(): boolean
+  + setMousePressed(mousePressed: boolean): void
+  + isMuted(): boolean
+  + setMuted(muted: boolean): void
+}
+
+class UrmButton {
+  - imgs: BufferedImage[]
+  - rowIndex: int
+  - index: int
+  - mouseOver: boolean
+  - mousePressed: boolean
+  + UrmButton(x: int, y: int, width: int, height: int, rowIndex: int)
+  + loadImages(): void
+  + update(): void
+  + draw(g: Graphics): void
+  + resetBools(): void
+  + isMouseOver(): boolean
+  + setMouseOver(mouseOver: boolean): void
+  + isMousePressed(): boolean
+  + setMousePressed(mousePressed: boolean): void
+}
+
+class VolumeButton {
+  - imgs: BufferedImage[]
+  - slider: BufferedImage
+  - index: int
+  - buttonX: int
+  - minX: int
+  - maxX: int
+  - mouseOver: boolean
+  - mousePressed: boolean
+  + VolumeButton(x: int, y: int, width: int, height: int)
+  + loadImages(): void
+  + update(): void
+  + draw(g: Graphics): void
+  + changeX(x: int): void
+  + resetBools(): void
+  + isMouseOver(): boolean
+  + setMouseOver(mouseOver: boolean): void
+  + isMousePressed(): boolean
+  + setMousePressed(mousePressed: boolean): void
+}
+
+SoundButton --> PauseButton
+UrmButton --> PauseButton
+VolumeButton --> PauseButton
+
+GameOverOverlay --|> Playing
+
+LevelCompletedOverlay --|> Playing
+LevelCompletedOverlay --|> UrmButton
+
+MenuButton --|> Gamestate 
+
+PauseOverlay --|> UrmButton
+PauseOverlay --|> SoundButton
+PauseOverlay --|> VolumeButton
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class Constants {
+    - GRAVITY: float
+    - ANI_SPEED: float
+
+    - EnemyConstants
+    - Environment
+    - UI
+    - Directions
+    - PlayerConstant
+    
+    + GetSpriteAmount(enemy_type: int, enemy_state: int): int
+    + GetMaxHealth(enemy_type: int): int
+    + GetEnemyDamage(enemy_type: int): int
+}
+
+class EnemyConstants {
+    + CRABBY: int
+    + IDLE: int
+    + RUNNING: int
+    + ATTACK: int
+    + HIT: int
+    + DEAD: int
+    + CRABBY_WIDTH_DEFAULT: int
+    + CRABBY_HEIGHT_DEFAULT: int
+    + CRABBY_WIDTH: int
+    + CRABBY_HEIGHT: int
+    + CRABBY_DRAWOFFSET_X: int
+    + CRABBY_DRAWOFFSET_Y: int
+}
+
+class Environment {
+    + BIG_CLOUD_WIDTH_DEFAULT: int
+    + BIG_CLOUD_HEIGHT_DEFAULT: int
+    + BIG_CLOUD_WIDTH: int
+    + BIG_CLOUD_HEIGHT: int
+    + SMALL_CLOUD_WIDTH_DEFAULT: int
+    + SMALL_CLOUD_HEIGHT_DEFAULT: int
+    + SMALL_CLOUD_WIDTH: int
+    + SMALL_CLOUD_HEIGHT: int
+}
+
+class UI {
+    - Buttons
+    - PauseButtons
+    - UrmButtons
+    - VolumeButton
+}
+
+class Buttons {
+    + B_WIDTH_DEFAULT: int
+    + B_HEIGHT_DEFAULT: int
+    + B_WIDTH: int
+    + B_HEIGHT: int
+}
+
+class PauseButtons {
+    + SOUND_SIZE_DEFAULT: int
+    + SOUND_SIZE: int
+}
+
+class UrmButtons {
+    + URM_DEFAULT_SIZE: int
+    + URM_SIZE: int
+}
+
+class VolumeButton {
+    + VOLUME_DEFAULT_WIDTH: int
+    + VOLUME_DEFAULT_HEIGHT: int
+    + VOLUME_WIDTH: int
+    + VOLUME_HEIGHT: int
+    + SLIDER_DEFAULT_WIDTH: int
+    + SLIDER_WIDTH: int
+}
+
+class Directions {
+    + LEFT: int
+    + UP: int
+    + RIGHT: int
+    + DOWN: int
+}
+
+class PlayerConstants {
+    + IDLE: int
+    + RUNNING: int
+    + JUMP: int
+    + FALL: int
+    + ATTACK: int
+    + HIT: int
+    + DEAD: int
+    + GetSpriteAmount(player_action: int): int
+}
+
+Constants --* EnemyConstants
+Constants --* Environment
+Constants --* UI
+Constants --* Directions
+Constants --* PlayerConstants
+
+UI --* Buttons
+UI --* PauseButtons
+UI --* UrmButtons
+UI --* VolumeButton
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class HelpMethods {
+  +CanMoveHere(x: float, y: float, width: float, height: float, lvlData: int[][]): boolean
+  +IsSolid(x: float, y: float, lvlData: int[][]): boolean
+  +tileSolid(xTile: int, yTile: int, lvlData: int[][]): boolean
+  +GetEntityPositionWall(hitBox: Rectangle2D.Float, x_speed: float): float
+  +GetPositionRoofFloor(hitBox: Rectangle2D.Float, airSpeed: float): float
+  +EntityFloor(hitBox: Rectangle2D.Float, lvlData: int[][]): boolean
+  +IsFloor(hitBox: Rectangle2D.Float, xSpeed: float, lvlData: int[][]): boolean
+  +sightClear_aux(xSmaller: int, xBigger: int, y: int, lvlData: int[][]): boolean
+  +sightClear(lvlData: int[][], hitBox_1: Rectangle2D.Float, hitBox_2: Rectangle2D.Float, tileY: int): boolean
+  +GetLevelData(img: BufferedImage): int[][]
+  +GetCrabs(img: BufferedImage): ArrayList<Crabby>
+  +GetPlayerSpawn(img: BufferedImage): Point
+}
+
+class LoadSave {
+  -PLAYER_ATLAS: String
+  -STATUS_BAR: String
+  -CRABBY_SPRITE: String
+  -LEVEL_ATLAS: String
+  -PLAYING_BACKGROUND_IMG: String
+  -SMALL_CLOUDS: String
+  -BIG_CLOUDS: String
+  -MENU_BACKGROUND: String
+  -MENU_BUTTONS: String
+  -MENU_BACKGROUND_IMG: String
+  -PAUSE_BACKGROUND: String
+  -COMPLETED_IMG: String
+  -URM_BUTTONS: String
+  -SOUND_BUTTONS: String
+  -VOLUME_BUTTONS: String
+  -DEAD_BACKGROUND: String
+  +GetAllLevels(): BufferedImage[]
+  +GetSpriteAtlas(filename: String): BufferedImage
+}
+
+Player --|> HelpMethods
+Enemy --|> HelpMethods
+Level --|> HelpMethods
+
+LevelManager --|> LoadSave
+Menu --|> LoadSave
+Playing --|> LoadSave
+Player --|> LoadSave
+EnemyManager --|> LoadSave
+GameOverOverlay --|> LoadSave
+LevelCompletedOverlay --|> LoadSave
+PauseOverlay --|> LoadSave
+UrmButton --|> LoadSave
+VolumeButton --|> LoadSave
+SoundButton --|> LoadSave
+MenuButton --|> LoadSave
+
+
+''''''''''''''''''''''''''''''''''''''''''''''''''''
+
+class DataStorage {
+  - level: int
+}
+
+class Save {
+  - levelManager: LevelManager
+
+  + Save(levelManager: LevelManager)
+  + save(): void
+  + load(): void
+}
+
+Save --|> LevelManager
+Save --|> DataStorage
+
+@enduml

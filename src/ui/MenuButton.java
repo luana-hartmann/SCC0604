@@ -8,6 +8,7 @@ import gamestates.Gamestate;
 import utilz.LoadSave;
 import static utilz.Constants.UI.buttons.*;
 
+/*constructs the menu buttons and their features*/
 public class MenuButton {
     
     private int xPosition, yPosition, rowIndex, index;

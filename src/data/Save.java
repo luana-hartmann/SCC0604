@@ -17,6 +17,7 @@ public class Save {
         this.levelManager = levelManager;
     }
     
+    /*saves the level index in a .dat file when S/RESTART is pressed*/
     public void save () {
         try {
             ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(new File("saving.dat")));
@@ -30,6 +31,7 @@ public class Save {
         }
     }
     
+    /*loads the .dat file when the game is opened*/
     public void load () {
         try {
              ObjectInputStream ois = new ObjectInputStream(new FileInputStream(new File("saving.dat")));

@@ -10,6 +10,7 @@ import main.Game;
 import entities.Crabby;
 import static utilz.Constants.EnemyConstants.CRABBY;
 
+/*methods that are really commom through the game implementation*/
 public class HelpMethods {
     
     public static boolean CanMoveHere (float x, float y, float width, float height, int[][] lvlData) {

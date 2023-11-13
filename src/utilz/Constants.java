@@ -2,6 +2,7 @@ package utilz;
 
 import main.Game;
 
+/*constants mostly used through the game implementation*/
 public class Constants {
     
     public static final float GRAVITY = 0.04f * Game.SCALE;

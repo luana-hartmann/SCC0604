@@ -9,6 +9,7 @@ import gamestates.Gamestate;
 import static gamestates.Gamestate.MENU;
 import static gamestates.Gamestate.PLAYING;
 
+/*mouse inputs for different game states*/
 public class MouseInputs implements MouseListener, MouseMotionListener{
     
     private GamePanel gamePanel;

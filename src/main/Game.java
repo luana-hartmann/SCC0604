@@ -10,6 +10,7 @@ import static gamestates.Gamestate.MENU;
 import static gamestates.Gamestate.PLAYING;
 import levels.LevelManager;
 
+/*controls the game*/
 public class Game implements Runnable {
     
     private GameWindow window;
@@ -62,7 +63,7 @@ public class Game implements Runnable {
             case MENU:               
                 menu.update();
                 break;
-            case OPTIONS:
+            case RESTART:
                 levelManager.lvlIndex = 0;
                 levelManager.save.save();
                 System.out.println("GAME RESTARTED. OPEN AGAIN.");
@@ -79,9 +80,18 @@ public class Game implements Runnable {
         
         switch(Gamestate.state) {
             case PLAYING:
+                if(playing.isPaused())
+                    window.jframe.setTitle("Sorry :(  No music or sound effects available");
+                else if (playing.isLevelCompleted())
+                    window.jframe.setTitle("Congratulations! Level Cleared. On to the Next Challenge!");
+                else if(playing.isGameOver())
+                    window.jframe.setTitle("Oops! Game Over. Press ESC to restart the level!");
+                else
+                    window.jframe.setTitle("Defeat all the crabbies to proceed! Move A and D - jump SPACE - attack CLICK - pause ESC - save S");
                 playing.draw(g);
                 break;
             case MENU:
+                window.jframe.setTitle("Platafform Game! Click PLAY or press ENTER to start!");
                 menu.draw(g);
                 break;
             default:

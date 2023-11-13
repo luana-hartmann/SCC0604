@@ -12,6 +12,7 @@ import static utilz.Constants.UI.PauseButtons.*;
 import static utilz.Constants.UI.UrmButtons.*;
 import static utilz.Constants.UI.VolumeButton.*;
 
+/*overlay when the the game is paused*/
 public class PauseOverlay {
     
     private Playing playing;

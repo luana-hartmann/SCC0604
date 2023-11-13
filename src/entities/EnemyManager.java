@@ -10,6 +10,7 @@ import levels.Level;
 import utilz.LoadSave;
 import static utilz.Constants.EnemyConstants.*;
 
+/*public class to work with all types of enemies*/
 public class EnemyManager {
     
     private Playing playing;
@@ -23,7 +24,7 @@ public class EnemyManager {
     
     public void loadEnemies (Level level) {
         crabbies = level.getCrabs();
-        //System.out.println("number of crabbies: " + crabbies.size());
+        //System.out.println("number of crabbies in the level: " + crabbies.size());
     }
     
     public void update(int[][] lvlData, Player player) {
@@ -73,6 +74,5 @@ public class EnemyManager {
     public void resetAllEnemies () {
         for (Crabby c : crabbies)
             c.resetEnemy();
-    }
-    
+    }   
 }

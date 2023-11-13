@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import utilz.LoadSave;
 import static utilz.Constants.UI.VolumeButton.*;
 
+/*constructs the volume slider and its features*/
 public class VolumeButton extends PauseButton {
     
     private BufferedImage[] imgs;

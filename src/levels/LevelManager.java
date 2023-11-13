@@ -10,6 +10,7 @@ import main.Game;
 import utilz.LoadSave;
 import gamestates.Gamestate;
 
+/*class that constructs the level*/
 public class LevelManager {
     
     private Game game;
